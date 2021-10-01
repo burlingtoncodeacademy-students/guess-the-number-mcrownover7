@@ -29,6 +29,7 @@ async function startup() {
   console.log(
     "Welcome to Guess the Number!\nThink of a random number greater than 1 but less than any maximum value.\nTo start we need some information..."
   );
+  await sleep(3000);
   //NOTE: may want to set min as global variable
   //let minValue = 1;
   //Asking the user for a max value.
@@ -36,7 +37,7 @@ async function startup() {
     "What do you want the max number to be in our game?\nNote your selected number cannot exceed this value!!!\n"
   );
   //Calling sleep to delay after previous user input and asking for the random number.
-  await sleep(1000);
+  await sleep(1500);
   let userValue = await ask("Please enter the random number you thought of!\n");
   //Creating new variables that parseInt the user input values to change the strings to numbers.
   //let minIntValue = minValue;
@@ -44,7 +45,7 @@ async function startup() {
   maxIntValue = parseInt(maxValue);
   userIntValue = parseInt(userValue);
   //Calling sleep to delay next question.
-  await sleep(1000);
+  await sleep(1500);
   //If statement needed to catch users inputting values that are not numerical.
   if (
     Number.isNaN(maxIntValue) === true ||
@@ -70,7 +71,7 @@ async function startup() {
       `Congrats! You followed instructions and selected...\nA max value of ${maxIntValue}\nYou entered ${userIntValue}\nNow the computer will attempt to guess your selected number!`
     );
     //Calling sleep to delay next question.
-    await sleep(1000);
+    await sleep(3000);
     valueGuesser();
   }
 }
@@ -85,10 +86,16 @@ async function valueGuesser() {
     `My guess is ${guess}!\nIs this correct? Yes or No?\n`
   );
   //Calling sleep to delay next question.
-  await sleep(1000);
+  await sleep(1500);
   //Ensuring that the input was yes or no.
   if (guessYesNo.toLowerCase() != "no" && guessYesNo.toLowerCase() != "yes") {
     console.log("Why didn't you type yes or no?");
+    process.exit();
+    //Anti-cheat check to make sure the guess was actually incorrect like the user responded.
+  } else if (guess === userIntValue && guessYesNo.toLowerCase() != "yes") {
+    console.log(
+      "You were trying to cheat! My guess was the same as your selected number.\nBEGONE!!!"
+    );
     process.exit();
     //Win statement if input is yes.
   } else if (guessYesNo.toLowerCase() === "yes") {
@@ -96,7 +103,7 @@ async function valueGuesser() {
       `I guessed it correctly!\nYour number was ${guess}!\nIt only took me ${counter} guess(es)!`
     );
 
-    await sleep(1000);
+    await sleep(1500);
     let restartQuestion = await ask(
       "Do you want to play again?\nPlease enter Yes or No!\n"
     );
@@ -110,7 +117,8 @@ async function valueGuesser() {
       process.exit();
     } else if (restartQuestion.toLowerCase() === "yes") {
       console.log("Restarting the game! Give me a second.");
-      await sleep(2000);
+      await sleep(3000);
+      console.clear();
       startup();
     } else {
       console.log("Thank you for playing!");
@@ -120,7 +128,7 @@ async function valueGuesser() {
     //Incorrect guess statement sends user to the higher or lower function. NOTE CHECK IF THEY LIED!
   } else {
     console.log(`My guess was wrong! Oh well, moving on!`);
-    await sleep(1000);
+    await sleep(3000);
     highLow();
   }
 }
@@ -130,19 +138,33 @@ async function highLow() {
   let highLowQuestion = await ask(
     `Is your number higher or lower than my guess of ${guess}?\nPlease type either higher or lower!\n`
   );
+  await sleep(1500);
   if (
     highLowQuestion.toLowerCase() != "higher" &&
     highLowQuestion.toLowerCase() != "lower"
   ) {
     console.log("Why didn't you type higher or lower?");
     process.exit();
+  } else if (guess > userIntValue && highLowQuestion.toLowerCase() != "lower") {
+    console.log(
+      "You are trying to cheat again...\nNext time try being honest with your answer!"
+    );
+    process.exit();
+  } else if (
+    guess < userIntValue &&
+    highLowQuestion.toLowerCase() != "higher"
+  ) {
+    console.log(
+      "You are trying to cheat again...\nNext time try being honest with your answer!"
+    );
+    process.exit();
   } else if (highLowQuestion.toLowerCase() === "higher") {
     console.log("So your chosen number is higher than my guess.\nhmm...");
-    await sleep(1000);
+    await sleep(3000);
     ifHigher();
   } else {
     console.log("So your chosen number is lower than my guess.\nhmm...");
-    await sleep(1000);
+    await sleep(3000);
     ifLower();
     //return lower to valueGuesser
     // return 'lower'
