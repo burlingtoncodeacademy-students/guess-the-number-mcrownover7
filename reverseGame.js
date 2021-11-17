@@ -33,6 +33,7 @@ startupReverse();
 async function startupReverse() {
   //resetting the counter global variable to handle game restarts.
   counter = 0;
+  min = 1;
   console.log(
     "Welcome to Reverse Guess the Number!\nIn this version of the game you will give the computer a maximum number it can select.\nThen it will generate a random number!\nIt is your job to guess that number!"
   );
@@ -79,7 +80,7 @@ async function startupReverse() {
 
 async function reverseGame() {
   //Incrementing the counter variable for the number of guesses made.
-    counter++;
+  counter++;
   guessReverse = await ask("What is your guess?\n");
   //Parsing the string into a number.
   guessReverse = parseInt(guessReverse);

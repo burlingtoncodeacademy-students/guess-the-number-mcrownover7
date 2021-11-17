@@ -14,8 +14,8 @@ function ask(questionText) {
 }
 
 //Create a counter global variable that counts the number of guesses in the valueGuesser function.
-let counter = 0;
-let minValue = 1;
+let counter;
+let minValue;
 let maxIntValue;
 let userIntValue;
 //Create a global guess variable so each function can access without inherit issues. It gets updated in the valueGuesser on each subsequent function run.
@@ -27,6 +27,7 @@ startup();
 async function startup() {
   //Resetting the counter global variable
   counter = 0;
+  minValue = 1;
   console.log(
     "Welcome to Guess the Number!\nThink of a random number greater than 1 but less than any maximum value.\nTo start we need some information..."
   );
@@ -94,6 +95,7 @@ async function valueGuesser() {
     console.log("Why didn't you type yes or no?");
     await sleep(3000);
     console.clear();
+    minValue = 1;
     startup();
     //Anti-cheat check to make sure the guess was actually incorrect like the user responded.
   } else if (guess === userIntValue && guessYesNo.toLowerCase() != "yes") {
@@ -102,6 +104,7 @@ async function valueGuesser() {
     );
     await sleep(3000);
     console.clear();
+    minValue = 1;
     startup();
     //Win statement if input is yes.
   } else if (guessYesNo.toLowerCase() === "yes") {
@@ -122,12 +125,14 @@ async function valueGuesser() {
       );
       await sleep(3000);
       console.clear();
+      minValue = 1;
       startup();
       //Restarting the game after clearing the console.
     } else if (restartQuestion.toLowerCase() === "yes") {
       console.log("Restarting the game! Give me a second.");
       await sleep(3000);
       console.clear();
+      minValue = 1;
       startup();
     } else {
       console.log("Thank you for playing!");
